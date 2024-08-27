@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anniversaire 18 ans</title>
+    <!-- Lien vers Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Forum&display=swap">
+    <style>
+        body {
+            font-family: 'Tenor Sans', sans-serif;
+            background-color: #e8cfc1;
+            color: #523e27;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            font-family: 'Forum', cursive;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 20px;
+        }
+
+        .filter-search-bar {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .filterSort-button, .search-bar {
+            background-color: #523e27;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px 0;
+            font-family: 'Tenor Sans', sans-serif;
+        }
+
+        .search-bar {
+            width: 100%;
+            max-width: 200px;
+            text-align: center;
+        }
+
+        .card {
+            background-color: #f2bd99;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card img {
+            width: 100%;
+            max-width: 150px;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .card-content {
+            width: 100%;
+        }
+
+        .card h2 {
+            margin: 0;
+            color: #523e27;
+            font-family: 'Forum', cursive;
+        }
+
+        .card p {
+            color: #523e27;
+            margin: 10px 0;
+        }
+
+        .card .date {
+            margin-top: 10px;
+            color: #523e27;
+        }
+
+        .titleContainer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        @media(min-width: 768px) {
+            .card {
+                flex-direction: row;
+                text-align: left;
+            }
+
+            .card img {
+                margin-bottom: 0;
+                margin-right: 20px;
+            }
+
+            .card-content {
+                flex: 1;
+            }
+        }
+
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup .container {
+            background-color: #e8cfc1;
+            color: #523e27;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .button {
+            background-color: #743f13;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px 0;
+            font-family: 'Tenor Sans', sans-serif;
+        }
+
+
+        button:hover {
+            background-color: #7e6d59;
+            transform: scale(1.1);
+            transition: 0.3s;
+        }
+        button:active {
+            transform: scale(0.9);
+            transition: 0.3s;
+        }
+        button{
+            transition: 0.3s;
+        }
+        input{
+            transition: 0.3s;
+        }
+        input:focus{
+            transform: scale(1.1);
+            transform-origin: center;
+            transition: 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <div class="titleContainer"><h1>Bonjour <%=username%></h1> <button class="button" id="publier">Publier</button></div>
+
+        <div class="filter-search-bar">
+            <div class="buttonContainer">
+            <button class="filterSort-button" id="filter">Filtrer</button>
+            <button class="filterSort-button" id="trier">Trier par date </button>
+        </div>
+            <input type="text" class="search-bar" id="search" placeholder="Rechercher...">
+        </div>
+    </div>
+    <script>
+        const displayElements = (elements) => {
+            elements.forEach(element => {
+                let card = document.createElement('div');
+                card.classList.add('card');
+
+                let img = document.createElement('img');
+                if (element.type === 'photo') {
+                    img.src = element.photo.url
+                } else if (element.type === 'video') {
+                    img.src = element.video.photo
+                }
+                card.appendChild(img);
+
+                let cardContent = document.createElement('div');
+                cardContent.classList.add('card-content');
+                // When cardcontent is clicked redirect to /detail?id=element.id
+                cardContent.addEventListener('click', () => {
+                    window.location.href = '/detail/' + element.id;
+                })
+
+                let h2 = document.createElement('h2');
+                h2.innerText = element.titre;
+                cardContent.appendChild(h2);
+
+                let p = document.createElement('p');
+                p.innerText = element.description;
+                cardContent.appendChild(p);
+
+                let p2 = document.createElement('p');
+                p2.innerText = 'Par ' + element.auteur;
+                cardContent.appendChild(p2);
+
+                let date = document.createElement('div');
+                date.classList.add('date');
+                let dateStr = new Date(element.date).toLocaleDateString();
+                date.innerText = dateStr;
+                cardContent.appendChild(date);
+
+                card.appendChild(cardContent);
+                document.querySelector('.container').appendChild(card);
+            });
+        }
+        let dataFromServer = <%-data%>;
+        dataFromServer = JSON.parse(dataFromServer);
+        
+
+        let search = document.getElementById('search');
+        search.addEventListener('input', () => {
+            let searchValue = search.value;
+            // Title search
+            let filteredData = dataFromServer.filter(element => element.titre.toLowerCase().includes(searchValue.toLowerCase()));
+            // Description search
+            filteredData = filteredData.concat(dataFromServer.filter(element => element.description.toLowerCase().includes(searchValue.toLowerCase())));
+            // Author search
+            filteredData = filteredData.concat(dataFromServer.filter(element => element.auteur.toLowerCase().includes(searchValue.toLowerCase())));
+            // Date search
+            filteredData = filteredData.concat(dataFromServer.filter(element => new Date(element.date).toLocaleDateString().toLowerCase().includes(searchValue.toLowerCase())));
+            // Remove duplicates
+            filteredData = filteredData.filter((element, index, self) => self.indexOf(element) === index);
+            document.querySelectorAll('.card').forEach(card => {
+                card.remove();
+            });
+
+            // Display the filtered data
+            displayElements(filteredData);
+        })
+
+
+        // Filter button
+        let filterButton = document.querySelector('#filter');
+        filterButton.addEventListener('click', () => {
+            // Display a popup with the filter options
+            let enablepopup = document.createElement('div');
+            enablepopup.classList.add('popup');
+            let popup = document.createElement('div');
+            popup.classList.add('container');
+            // Read url parameters
+            let url = new URL(window.location.href);
+            let photoChecked = 'checked=' + (url.searchParams.get('photo')|| url.searchParams.get('photo') === null);
+            console.log(photoChecked);
+            let videoChecked = 'checked=' + (url.searchParams.get('video') || url.searchParams.get('video') === null);
+            console.log(videoChecked);
+            let clemenceChecked = 'checked=' + (url.searchParams.get('clemence') === 'true' || url.searchParams.get('clemence') === null);
+            let mattiaChecked = 'checked=' + (url.searchParams.get('mattia') === 'true' || url.searchParams.get('mattia') === null);
+            // Display the filter options
+            if (photoChecked === 'checked=true') {
+                photoChecked = 'checked';
+            } else {
+                photoChecked = '';
+            }
+            if (videoChecked === 'checked=true') {
+                videoChecked = 'checked';
+            } else {
+                videoChecked = '';
+            }
+            if (clemenceChecked === 'checked=true') {
+                clemenceChecked = 'checked';
+            } else {
+                clemenceChecked = '';
+            }
+            if (mattiaChecked === 'checked=true') {
+                mattiaChecked = 'checked';
+            } else {
+                mattiaChecked = '';
+            }
+            popup.innerHTML = `
+                <h2>Filtrer par type</h2>
+                <input type="checkbox" id="photo" name="photo" ${photoChecked}>
+                <label for="photo">Photo</label><br>
+                <input type="checkbox" id="video" name="video" ${videoChecked}>
+                <label for="video">Vidéo</label><br>
+                <input type="checkbox" id="clemence" name="clemence" ${clemenceChecked}>
+                <label for="clemence">Clémence</label><br>
+                <input type="checkbox" id="mattia" name="mattia" ${mattiaChecked}>
+                <label for="mattia">Mattia</label><br>
+                <button id="filter-button">Filtrer</button>
+            `;
+            enablepopup.appendChild(popup);
+            document.body.appendChild(enablepopup);
+            // if i click outside the popup, it will close but if i click on popup it will not close
+            enablepopup.addEventListener('click', (e) => {
+                if (e.target === enablepopup) {
+                    enablepopup.remove();
+                }
+            })
+            // Filter button in the popup
+            let filterButtonInside = document.getElementById('filter-button');
+            filterButtonInside.addEventListener('click', () => {
+                let photoChecked = document.getElementById('photo').checked;
+                let videoChecked = document.getElementById('video').checked;
+                let clemenceChecked = document.getElementById('clemence').checked;
+                let mattiaChecked = document.getElementById('mattia').checked;
+                
+                enablepopup.remove();
+                // change url parameters
+                let url = new URL(window.location.href);
+                url.searchParams.set('photo', photoChecked);
+                url.searchParams.set('video', videoChecked);
+                url.searchParams.set('clemence', clemenceChecked);
+                url.searchParams.set('mattia', mattiaChecked);
+                window.history.pushState({}, '', url);
+                applyFiltersAndSort();
+            })
+
+        })
+
+        let sortButton = document.querySelector('#trier');
+        let currentOrder = '0'
+        sortButton.addEventListener('click', () => {
+            if (currentOrder === '0' || currentOrder === 'down') {
+                currentOrder = 'up';
+                sortButton.innerText = 'Trier par date ↑';
+            }
+            else {
+                currentOrder = 'down';
+                sortButton.innerText = 'Trier par date ↓';
+            }
+            let url = new URL(window.location.href);
+            url.searchParams.set('order', currentOrder);
+            window.history.pushState({}, '', url);
+            applyFiltersAndSort();
+
+        })
+
+
+        const applyFiltersAndSort = () => {
+            let url = new URL(window.location.href);
+            let photoChecked = url.searchParams.get('photo') === 'true' || url.searchParams.get('photo') === null;
+            let videoChecked = url.searchParams.get('video') === 'true' || url.searchParams.get('video') === null;
+            let clemenceChecked = url.searchParams.get('clemence') === 'true' || url.searchParams.get('clemence') === null;
+            let mattiaChecked = url.searchParams.get('mattia') === 'true' || url.searchParams.get('mattia') === null;
+            let order = url.searchParams.get('order');
+            let filteredData = [];
+
+            if (photoChecked) {
+                filteredData = filteredData.concat(dataFromServer.filter(element => element.type === 'photo'));
+            }
+            if (videoChecked) {
+                filteredData = filteredData.concat(dataFromServer.filter(element => element.type === 'video'));
+            }
+            if (clemenceChecked && !mattiaChecked) {
+                filteredData.forEach(element => {
+                    if (element.auteur === 'Mattia') {
+                        let index = filteredData.indexOf(element);
+                        filteredData.splice(index, 1);
+                    }
+                });
+            }
+            if (mattiaChecked && !clemenceChecked) {
+                filteredData.forEach(element => {
+                    if (element.auteur === 'Clémence') {
+                        let index = filteredData.indexOf(element);
+                        filteredData.splice(index, 1);
+
+                    }
+                });
+            }
+            filteredData = filteredData.filter((element, index, self) => self.indexOf(element) === index);
+            document.querySelectorAll('.card').forEach(card => {
+                card.remove();
+            });
+            if (order === "up") {
+                let sortedData = filteredData.sort((a, b) => new Date(b.date) - new Date(a.date));
+                displayElements(sortedData);
+            } else if (order === "down") {
+                let sortedData = filteredData.sort((a, b) => new Date(a.date) - new Date(b.date));
+                displayElements(sortedData);
+            } else {
+                displayElements(filteredData);
+            }
+            
+        }
+        applyFiltersAndSort();
+
+
+        let publier = document.getElementById('publier');
+        publier.addEventListener('click', () => {
+            window.location.href = '/publier';
+        })
+
+
+
+
+    </script>
+</body>
+</html>

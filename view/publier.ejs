@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publier en tant que Mattia</title>
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Forum&display=swap">
+    <style>
+        body {
+            font-family: 'Tenor Sans', sans-serif;
+            background-color: #e8cfc1;
+            color: #523e27;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #f2bd99;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 10px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-family: 'Forum', cursive;
+            color: #523e27;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #523e27;
+        }
+
+        select, input[type="file"], input[type="text"], textarea, input[type="date"] {
+            padding: 10px;
+            border: 1px solid #523e27;
+            border-radius: 5px;
+            background-color: #e8cfc1;
+            color: #523e27;
+            font-family: 'Tenor Sans', sans-serif;
+            transition: border-color 0.3s;
+        }
+
+        select:focus, input[type="file"]:focus, input[type="text"]:focus, textarea:focus, input[type="date"]:focus {
+            border-color: #523e27;
+            outline: none;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .button-group button, .back-button {
+            background-color: #523e27;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Tenor Sans', sans-serif;
+            transition: background-color 0.3s;
+        }
+
+        .button-group button:hover, .back-button:hover {
+            background-color: #3d2a1e;
+        }
+
+        .back-button {
+            background-color: #e8cfc1;
+            color: #523e27;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .back-button:hover {
+            background-color: #f2bd99;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Publier en tant que Mattia</h1>
+        <form id="publish-form" action="#/upload_files" method="post" enctype="multipart/form-data" class="form-container">
+            <div class="form-group">
+                <label for="content-type">Type de contenu :</label>
+                <select id="content-type" name="content-type" required>
+                    <option value="">--Sélectionner--</option>
+                    <option value="photo">Photo</option>
+                    <option value="video">Vidéo</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="file-upload">Télécharger le fichier :</label>
+                <input type="file" id="file-upload" name="file-upload" accept="image/*" required>
+            </div>
+
+            <div id="additional-photo-group" class="form-group hidden">
+                <label for="photo-upload">Télécharger une photo associée :</label>
+                <input type="file" id="photo-upload" name="photo-upload" accept="image/*" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="title">Titre :</label>
+                <input type="text" id="title" name="title" placeholder="Entrez le titre" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Description :</label>
+                <textarea id="description" name="description" placeholder="Entrez la description" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="date">Date :</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+            
+            <div class="button-group">
+                <a href="#" class="back-button">Retour</a>
+                <button type="submit" class="publish-button">Publier</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('content-type').addEventListener('change', function() {
+            const fileInput = document.getElementById('file-upload');
+            const additionalPhotoGroup = document.getElementById('additional-photo-group');
+
+            if (this.value === 'photo') {
+                fileInput.accept = 'image/*';
+                additionalPhotoGroup.classList.add('hidden');
+                document.getElementById('photo-upload').removeAttribute('required');
+            } else if (this.value === 'video') {
+                fileInput.accept = 'video/*';
+                additionalPhotoGroup.classList.remove('hidden');
+                document.getElementById('photo-upload').setAttribute('required', '');
+            } else {
+                fileInput.accept = '';
+                additionalPhotoGroup.classList.add('hidden');
+                document.getElementById('photo-upload').removeAttribute('required');
+            }
+        });
+
+
+
+        const form = document.getElementById('publish-form');
+        form.addEventListener('submit', (e) => {
+            // Open a popup with a progress bar
+            let popup = window.open('', 'popup', 'width=200,height=100');
+            popup.document.write('<progress id="progress" value="0" max="100"></progress>');
+            e.preventDefault();
+            const formData = new FormData();
+
+            const dataType = document.getElementById('content-type').value;
+            if (dataType == 'photo') {
+                photo = document.getElementById('file-upload').files[0];
+                formData.append('media', photo);
+
+            } else if (dataType == 'video') {
+                const video = document.getElementById('file-upload').files[0];
+                const photo = document.getElementById('photo-upload').files[0];
+                formData.append('media', photo);
+                formData.append('media', video);
+
+            }
+            else {
+                alert('Veuillez sélectionner un type de contenu'); return
+            }
+
+            const titre = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const date = document.getElementById('date').value;
+
+            
+            formData.append('dataType', dataType);
+            formData.append('titre', titre);
+            formData.append('description', description);
+            formData.append('date', date);
+            formData.append('auteur', '<%=username%>');
+
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/uploadFiles', true);
+
+            xhr.upload.onprogress = function(e) {
+                if (e.lengthComputable) {
+                    let percentComplete = (e.loaded / e.total) * 100;
+                    console.log(percentComplete + '% uploaded');
+                    popup.document.getElementById('progress').value = percentComplete;
+                }
+            };
+
+            xhr.onerror = function(e) {
+                console.log('An error occurred while submitting the form. Please try again.')
+                console.error(e);
+            };
+
+            xhr.onload = function() {
+                console.log(this.statusText);
+                if (this.status === 200) {
+                    console.log('Form submitted successfully');
+                    popup.close();
+                    window.location.href = '/home';
+                } else {
+                    console.log('An error occurred while submitting the form. Please try again.');
+                }
+            };
+
+            xhr.send(formData);
+
+
+        });
+
+    </script>
+</body>
+</html>
+ 

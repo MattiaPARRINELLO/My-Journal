@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vidéo du 10/10/2023</title>
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Forum&display=swap">
+    <style>
+        body {
+            font-family: 'Tenor Sans', sans-serif;
+            background-color: #e8cfc1;
+            color: #523e27;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding-top: 20px;
+        }
+
+        .container {
+            background-color: #f2bd99;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 10px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-family: 'Forum', cursive;
+            color: #523e27;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .image-container,
+        .video-container {
+            width: 100%;
+            max-width: 700px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .image-container img,
+        .video-container video {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 10px;
+        }
+
+        .description-title {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center;
+            font-family: 'Forum', cursive;
+            color: #523e27;
+        }
+
+        .description {
+            margin-top: 10px;
+            font-family: 'Tenor Sans', sans-serif;
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .back-button {
+            background-color: #e8cfc1;
+            color: #523e27;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            text-align: center;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .back-button:hover {
+            background-color: #f2bd99;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span id='mediaType'></span> du <span id='mediaDate'></span></h1>
+        <div class="content">
+            <div class="image-container">
+                <img id='img'>
+            </div>
+            <div class="video-container">
+                <!-- La vidéo est optionnelle ; vous pouvez enlever ce bloc si vous n'avez pas de vidéo -->
+                <video controls>
+                    <source src="chemin-vers-votre-video.mp4" type="video/mp4">
+                    Votre navigateur ne supporte pas la balise vidéo.
+                </video>
+            </div>
+            <div class="description-title">
+                <h2 id="titre">Titre de la description</h2>
+            </div>
+            <div class="description">
+                <p id="description">Voici la description de la publication. Elle peut être longue ou courte et contient toutes les informations nécessaires à propos de l'image et, si présente, de la vidéo.</p>
+            </div>
+            <div class="footer">
+                Publié par <span id='author'></span>
+            </div>
+        </div>
+        <a href="#" class="back-button">Retour</a>
+    </div>
+    <script>
+        const item = <%- JSON.stringify(item) %>;
+        // convert date to local string format
+        document.getElementById('mediaType').innerText = item.type.charAt(0).toUpperCase() + item.type.slice(1);
+        document.getElementById('mediaDate').innerText = new Date(item.date).toLocaleDateString();
+        document.getElementById('titre').innerText = item.titre;
+        document.getElementById('description').innerText = item.description;
+        document.getElementById('author').innerText = item.auteur;
+
+        if(item.type === 'photo') {
+            document.querySelector('.video-container').style.display = 'none';
+            document.getElementById('img').src = '/'+item.photo.url;
+        } else if (item.type === 'video') {
+            document.querySelector('video').src = '/'+item.video.url;
+            document.getElementById('img').src = '/'+item.video.photo;
+        }
+    </script>
+</body>
+</html>
