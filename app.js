@@ -39,7 +39,7 @@ app.get('/', (req, res) => {
     if(req.session.loggedin){
         res.redirect('/home');
     } else {
-    res.sendFile(path.join(__dirname, 'view/login.html'));
+    res.render(__dirname + '/view/login.ejs');
     }
 })
 
