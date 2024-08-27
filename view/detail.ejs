@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vidéo du 10/10/2023</title>
+    <title>Voir en détail</title>
     <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Forum&display=swap">
     <style>
@@ -139,6 +139,13 @@
             document.querySelector('video').src = '/'+item.video.url;
             document.getElementById('img').src = '/'+item.video.photo;
         }
+
+
+        let backButton = document.querySelector('.back-button');
+        backButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.history.back();
+        });
     </script>
 </body>
 </html>

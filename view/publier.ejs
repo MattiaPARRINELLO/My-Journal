@@ -248,6 +248,15 @@
 
         });
 
+
+
+
+        let backButton = document.querySelector('.back-button');
+        backButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.history.back();
+        });
+
     </script>
 </body>
 </html>
