@@ -165,4 +165,18 @@ app.get('/detail/:id', (req, res) => {
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
+    fs.readFile(__dirname + '/data.json', 'utf8', (err, data) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        if (data === '') {
+            fs.writeFile(__dirname + '/data.json', '[]', (err) => {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+            });
+        }
+    })
 });
