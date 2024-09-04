@@ -1,6 +1,6 @@
 {
   "name": "my-journal",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A journal for me and my girlfriend to save our memory",
   "main": "app.js",
   "scripts": {

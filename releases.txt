@@ -1,2 +1,5 @@
 Version 1.0.0
 First Version of MyJournal that is working
+
+Version 1.0.1
+New admin page accessible with the user admin. The page does nothing for the moment.
