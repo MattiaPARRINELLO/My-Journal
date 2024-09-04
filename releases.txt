@@ -1,0 +1,2 @@
+Version 1.0.0
+First Version of MyJournal that is working
