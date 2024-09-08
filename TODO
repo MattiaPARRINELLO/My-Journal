@@ -1,0 +1,4 @@
+Ajouter une page admin pour supprimer les vidéo ou photo accessible uniquement quand on clique 5 fois sur le titre Bonjour admin (ne marche pas quand on est pas sur le compte admin)
+Afficher le nombre de résultat trouvés
+Styliser la barre de progression pour quelle soit plus agréable a regarder et peut être la mettre par dessus la page de base au lieu d'ouvrir un nouvel onglet
+Je sais pas si c'est possible mais page admin pouvoir modifier les utilisateur (oui avec fs)
