@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Administration</title>
+    <!-- Lien vers Google Fonts -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Forum&display=swap"
+    />
+    <style>
+      body {
+        font-family: "Tenor Sans", sans-serif;
+        background-color: #e8cfc1;
+        color: #523e27;
+        margin: 0;
+        padding: 0;
+      }
+
+      h1 {
+        font-family: "Forum", cursive;
+        text-align: center;
+        padding: 20px 0;
+        margin: 0;
+        background-color: #523e27;
+        color: #e8cfc1;
+      }
+
+      .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding-top: 20px;
+      }
+
+      .filter-search-bar {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 20px;
+      }
+
+      .search-bar {
+        background-color: #f2bd99;
+        color: #523e27;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        width: 100%;
+        max-width: 200px;
+        text-align: center;
+        font-family: "Tenor Sans", sans-serif;
+      }
+
+      .card {
+        background-color: #f2bd99;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .card img {
+        width: 100%;
+        max-width: 150px;
+        height: auto;
+        border-radius: 10px;
+        margin-bottom: 20px;
+      }
+
+      .card-content {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .card h2 {
+        margin: 0;
+        color: #523e27;
+        font-family: "Forum", cursive;
+        text-align: center;
+      }
+
+      .card p {
+        color: #523e27;
+        margin: 10px 0;
+        text-align: center;
+      }
+
+      .card .date {
+        margin-top: 10px;
+        color: #523e27;
+      }
+
+      .card-buttons {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+      }
+
+      .card-buttons button {
+        background-color: #523e27;
+        color: #e8cfc1;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-family: "Tenor Sans", sans-serif;
+        transition: background-color 0.3s;
+      }
+
+      .card-buttons button:hover {
+        background-color: #e8cfc1;
+        color: #523e27;
+        border: 1px solid #523e27;
+      }
+
+      @media (min-width: 768px) {
+        .card {
+          flex-direction: row;
+          text-align: left;
+        }
+
+        .card img {
+          margin-bottom: 0;
+          margin-right: 20px;
+        }
+
+        .card-content {
+          flex: 1;
+          align-items: flex-start;
+        }
+
+        .card h2,
+        .card p,
+        .card .date {
+          text-align: left;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Administration</h1>
+
+    <div class="container">
+      <div class="filter-search-bar">
+        <input
+          id="search"
+          type="text"
+          class="search-bar"
+          placeholder="Rechercher..."
+        />
+      </div>
+
+      <!-- Exemples de cartes d'éléments administrables -->
+
+      <!-- Ajoutez plus de cartes ici -->
+    </div>
+    <script>
+        const displayElements = (elements) => {
+          elements.forEach((element) => {
+            let card = document.createElement("div");
+            card.classList.add("card");
+
+            let img = document.createElement("img");
+            if (element.type === "photo") {
+              img.src = element.photo.url;
+            } else if (element.type === "video") {
+              img.src = element.video.photo;
+            }
+            card.appendChild(img);
+
+            let cardContent = document.createElement("div");
+            cardContent.classList.add("card-content");
+
+            let h2 = document.createElement("h2");
+            h2.innerText = element.titre;
+            cardContent.appendChild(h2);
+
+            let p = document.createElement("p");
+            p.innerText = element.description;
+            cardContent.appendChild(p);
+
+            let p2 = document.createElement("p");
+            p2.innerText = "Par " + element.auteur;
+            cardContent.appendChild(p2);
+
+            let date = document.createElement("div");
+            date.classList.add("date");
+            let dateStr = new Date(element.date).toLocaleDateString();
+            date.innerText = dateStr;
+            cardContent.appendChild(date);
+
+            let cardButtons = document.createElement("div");
+            cardButtons.classList.add("card-buttons");
+
+            let editButton = document.createElement("button");
+            editButton.innerText = "Modifier";
+            editButton.addEventListener("click", () => {
+              window.location.href = "/edit/" + element.id;
+            });
+
+            let deleteButton = document.createElement("button");
+            deleteButton.innerText = "Supprimer";
+            deleteButton.addEventListener("click", () => {
+              window.location.href = "/delete/" + element.id;
+            });
+
+            cardButtons.appendChild(editButton);
+            cardButtons.appendChild(deleteButton);
+            cardContent.appendChild(cardButtons);
+
+            card.appendChild(cardContent);
+            document.querySelector(".container").appendChild(card);
+          });
+        };
+        let dataFromServer = <%-data%>;
+        dataFromServer = JSON.parse(dataFromServer)
+        displayElements(dataFromServer)
+
+
+
+
+      let search = document.getElementById('search');
+        search.addEventListener('input', () => {
+            let searchValue = search.value;
+            // Title search
+            let filteredData = dataFromServer.filter(element => element.titre.toLowerCase().includes(searchValue.toLowerCase()));
+            // Description search
+            filteredData = filteredData.concat(dataFromServer.filter(element => element.description.toLowerCase().includes(searchValue.toLowerCase())));
+            // Author search
+            filteredData = filteredData.concat(dataFromServer.filter(element => element.auteur.toLowerCase().includes(searchValue.toLowerCase())));
+            // Date search
+            filteredData = filteredData.concat(dataFromServer.filter(element => new Date(element.date).toLocaleDateString().toLowerCase().includes(searchValue.toLowerCase())));
+            // Remove duplicates
+            filteredData = filteredData.filter((element, index, self) => self.indexOf(element) === index);
+            document.querySelectorAll('.card').forEach(card => {
+                card.remove();
+            });
+            displayElements(filteredData)
+          })
+    </script>
+  </body>
+</html>

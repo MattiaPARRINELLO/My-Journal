@@ -164,6 +164,24 @@ app.get("/detail/:id", (req, res) => {
   }
 });
 
+app.get("/admin", (req, res) => {
+  if (req.session.loggedin && req.session.username === "admin") {
+    fs.readFile(__dirname + "/data.json", "utf8", (err, data) => {
+      if (err) {
+        console.log(err)
+        return
+      }
+      let jsonData = JSON.stringify(data)
+      res.render(__dirname + "/view/admin.ejs", {
+        username: req.session.username,
+        data: jsonData
+      })
+    })
+  } else {
+    res.redirect('/')
+  }
+})
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
   fs.readFile(__dirname + "/data.json", "utf8", (err, data) => {
