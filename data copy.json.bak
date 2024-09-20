@@ -1,0 +1,50 @@
+[
+    {
+        "titre": "Photo Matt",
+        "description": "2",
+        "date": "2021-09-01",
+        "auteur": "Mattia",
+        "type": "video",
+        "video": {
+            "url" : "assets/video.mp4",
+            "miniature" : "assets/miniature.jpg",
+            "photo" : "assets/photo.jpg"
+        }
+
+    },
+    {
+        "titre": "Video Matt",
+        "description": "Titre 1",
+        "date": "2023-10-10",
+        "auteur": "Mattia",
+        "type": "photo",
+        "photo": {
+            "url" : "assets/video.mp4",
+            "miniature" : "assets/miniature.jpg"
+        }
+        
+    },
+    {
+        "titre": "Photo Clem",
+        "description": "Titre 2",
+        "date": "2021-09-01",
+        "auteur": "Clémence",
+        "type": "photo",
+        "photo": {
+            "url" : "assets/video.mp4",
+            "miniature" : "assets/miniature.jpg"
+        }
+    },
+    {
+        "titre": "Video Clem",
+        "description": "Titre 3",
+        "date": "2023-10-10",
+        "auteur": "Clémence",
+        "type": "video",
+        "video": {
+            "url" : "assets/video.mp4",
+            "miniature" : "assets/miniature.jpg",
+            "photo" : "assets/photo.jpg"
+        }
+    }
+]
